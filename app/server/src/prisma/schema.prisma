@@ -1,0 +1,179 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider   = "prisma-client"
+  output     = "../generated/prisma"
+  engineType = "client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum MemoryType {
+  NOTE
+  LINK
+  IMAGE
+  DOC
+}
+
+enum ShareVisibility {
+  PUBLIC // visible to anyone
+  SECRET // only creator can see
+  RESTRICTED // only logged-in users with permission can see
+}
+
+model User {
+  id             String    @id @default(cuid())
+  email          String?   @unique
+  emailVerified  DateTime?
+  username       String?   @unique
+  passwordHash   String? // null for OAuth users / guests without password
+  isGuest        Boolean   @default(false)
+  guestExpiresAt DateTime? // optional expiry for guest accounts
+  provider       String? // e.g., "google", "github", "credentials"
+  providerId     String? // provider unique id
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  sessions Session[]
+  memories Memory[]
+  shares   Share[]
+  files    File[]
+  events   EventLog[]
+  profile  ProfileSettings?
+
+  @@index([createdAt])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model Memory {
+  id     String     @id @default(cuid())
+  userId String
+  user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type   MemoryType @default(NOTE)
+
+  title    String?
+  content  String? // long-form content for notes/docs; for links this can be description
+  url      String? // for LINK
+  isPinned Boolean @default(false)
+
+  summary       String? // cached AI summary
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime? // soft delete
+
+  files  File[] // 0..n files attached
+  tags   MemoryTag[]
+  shares Share[]
+  events EventLog[]
+
+  viewsCount  Int @default(0)
+  sharesCount Int @default(0)
+
+  @@index([userId, createdAt])
+  @@index([type])
+}
+
+model File {
+  id       String  @id @default(cuid())
+  userId   String
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  memoryId String? // file may be uploaded independently of memory
+  memory   Memory? @relation(fields: [memoryId], references: [id], onDelete: Cascade)
+
+  key        String // object key in R2 / S3 (unique identifier)
+  filename   String
+  mimeType   String
+  size       Int
+  isPublic   Boolean  @default(false)
+  uploadedAt DateTime @default(now())
+
+  @@unique([key])
+  @@index([userId])
+  @@index([memoryId])
+}
+
+model Tag {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+
+  memoryTags MemoryTag[]
+
+  @@index([name])
+}
+
+model MemoryTag {
+  memoryId String
+  tagId    String
+
+  memory Memory @relation(fields: [memoryId], references: [id], onDelete: Cascade)
+  tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([memoryId, tagId])
+  @@index([tagId])
+}
+
+model Share {
+  id          String @id @default(cuid())
+  memoryId    String
+  memory      Memory @relation(fields: [memoryId], references: [id], onDelete: Cascade)
+  createdById String
+  createdBy   User   @relation(fields: [createdById], references: [id], onDelete: Cascade)
+
+  token      String          @unique // unguessable token for SECRET links
+  visibility ShareVisibility @default(SECRET)
+  expiresAt  DateTime?
+  maxViews   Int? // optional throttle
+  createdAt  DateTime        @default(now())
+  views      EventLog[]      @relation("share_views")
+
+  @@index([memoryId])
+  @@index([createdById])
+}
+
+model EventLog {
+  id        String   @id @default(cuid())
+  type      String // e.g., "memory_create", "memory_view", "share_view"
+  userId    String? // optional, null for anonymous views
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  memoryId  String? // optional
+  memory    Memory?  @relation(fields: [memoryId], references: [id], onDelete: Cascade)
+  shareId   String? // optional if event relates to share
+  share     Share?   @relation("share_views", fields: [shareId], references: [id], onDelete: Cascade)
+  meta      Json? // extensible metadata (user agent, ip hash, etc.)
+  createdAt DateTime @default(now())
+
+  @@index([type, createdAt])
+  @@index([memoryId])
+  @@index([userId])
+}
+
+model ProfileSettings {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  slug        String?  @unique // public profile path: /u/:slug
+  displayName String?
+  bio         String?
+  isPublic    Boolean  @default(false) // publish toggle
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
