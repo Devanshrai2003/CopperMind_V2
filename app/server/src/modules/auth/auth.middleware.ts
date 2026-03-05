@@ -1,12 +1,12 @@
 import type { Request, Response, NextFunction } from "express";
 import { prisma } from "../../lib/prisma.js";
-import { errorResponse } from "../../lib/apiResponse";
-import { ERROR_CODES } from "../../lib/apiErrors";
+import { errorResponse } from "../../lib/apiResponse.js";
+import { ERROR_CODES } from "../../lib/apiErrors.js";
 
 export async function resolveUser(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   req.user = null;
   req.session = null;
@@ -52,7 +52,7 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
       res,
       ERROR_CODES.AUTH_REQUIRED,
       "Authentication required",
-      401
+      401,
     );
   }
 
@@ -62,14 +62,14 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
 export function requireNonGuest(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   if (!req.user) {
     return errorResponse(
       res,
       ERROR_CODES.AUTH_REQUIRED,
       "Authentication required",
-      401
+      401,
     );
   }
 
@@ -78,7 +78,7 @@ export function requireNonGuest(
       res,
       ERROR_CODES.FORBIDDEN,
       "Only Accessible To Users",
-      403
+      403,
     );
   }
 
