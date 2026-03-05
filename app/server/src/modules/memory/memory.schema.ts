@@ -27,7 +27,7 @@ export const memoryQuerySchema = z.object({
   isPinned: z
     .boolean()
     .optional()
-    .transform((val) => (val !== undefined ? val === "true" : undefined)),
+    .transform((val) => (val !== undefined ? val === true : undefined)),
   type: z.enum(["NOTE", "LINK", "IMAGE", "DOC"]).optional(),
   tags: z
     .string()

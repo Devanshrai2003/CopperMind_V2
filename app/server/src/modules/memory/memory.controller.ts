@@ -14,7 +14,7 @@ import {
   memoryQuerySchema,
   suggestTagsQuerySchema,
   updateMemorySchema,
-} from "../../types/memory.js";
+} from "./memory.schema.js";
 
 export async function getMemoriesHandler(req: Request, res: Response) {
   try {
