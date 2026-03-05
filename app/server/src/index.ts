@@ -3,6 +3,7 @@ dotenv.config();
 
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import authRouter from "./modules/auth/auth.routes.js";
 import memoryRouter from "./modules/memory/memory.routes.js";
 import { resolveUser } from "./modules/auth/auth.middleware.js";
@@ -11,6 +12,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 app.use(resolveUser);
 
 app.get("/", (req, res) => {
@@ -18,7 +20,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/auth", authRouter);
-app.use("/memories", authRouter);
+app.use("/memories", memoryRouter);
 
 const PORT = process.env.PORT || 3000;
 
