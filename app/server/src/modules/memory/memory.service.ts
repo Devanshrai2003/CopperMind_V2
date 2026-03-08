@@ -1,7 +1,7 @@
 import { MemoryType } from "../../generated/prisma/enums.js";
 import { gemini } from "../../lib/googleGenAi.js";
 import { prisma } from "../../lib/prisma.js";
-import { normalizeTags } from "./memory.utils.js";
+import { extractMemoryLinks, normalizeTags } from "./memory.utils.js";
 
 export async function createMemory(
   userId: string,
@@ -51,6 +51,11 @@ export async function createMemory(
         skipDuplicates: true,
       });
     }
+
+    if (content) {
+      await createMemoryLinks(userId, memory.id, content);
+    }
+
     return { memory, tags: normalizedTags };
   });
 
@@ -125,6 +130,11 @@ export async function updateMemory(
           })),
           skipDuplicates: true,
         });
+
+        if (content) {
+          await createMemoryLinks(userId, memory.id, content);
+        }
+
         return { memory: updatedMemory, tags: normalizedTags };
       }
     }
@@ -177,6 +187,24 @@ export async function getMemoryById(userId: string, memoryId: string) {
 
   const tags = memoryTags.map((mt) => mt.tag.name);
 
+  const links = await prisma.memoryLink.findMany({
+    where: {
+      fromId: memory.id,
+    },
+    include: {
+      to: true,
+    },
+  });
+
+  const backlinks = await prisma.memoryLink.findMany({
+    where: {
+      toId: memory.id,
+    },
+    include: {
+      from: true,
+    },
+  });
+
   return {
     id: memory.id,
     type: memory.type,
@@ -187,6 +215,8 @@ export async function getMemoryById(userId: string, memoryId: string) {
     createdAt: memory.createdAt,
     updatedAt: memory.updatedAt,
     tags,
+    links,
+    backlinks,
   };
 }
 
@@ -315,4 +345,37 @@ export async function suggestTags(title: string, content?: string) {
   });
 
   return normalizeTags(JSON.parse(result.text ?? "[]"));
+}
+
+export async function createMemoryLinks(
+  userId: string,
+  memoryId: string,
+  content: string,
+) {
+  const links = extractMemoryLinks(content);
+
+  const linkedMemoriesRaw = await prisma.memory.findMany({
+    where: {
+      userId,
+      title: { in: links },
+    },
+  });
+
+  const linkedMemories = linkedMemoriesRaw.filter(
+    (link) => link.id !== memoryId,
+  );
+
+  const memoryLinks = await prisma.$transaction(async (tx) => {
+    await tx.memoryLink.deleteMany({
+      where: { fromId: memoryId },
+    });
+
+    await tx.memoryLink.createMany({
+      data: linkedMemories.map((link) => ({
+        fromId: memoryId,
+        toId: link.id,
+      })),
+      skipDuplicates: true,
+    });
+  });
 }

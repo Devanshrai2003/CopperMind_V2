@@ -230,6 +230,6 @@ export async function fetchTagSuggestions(req: Request, res: Response) {
       400,
     );
   }
-  const suggestions = suggestTags(title, content);
+  const suggestions = await suggestTags(title, content);
   return successResponse(res, suggestions, 200);
 }

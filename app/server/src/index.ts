@@ -16,7 +16,7 @@ app.use(cookieParser());
 app.use(resolveUser);
 
 app.get("/", (req, res) => {
-  res.send("CopperMind Backend Online");
+  res.status(200).json({ status: "OK", message: "CopperMind Backend Online" });
 });
 
 app.use("/auth", authRouter);

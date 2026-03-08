@@ -80,12 +80,12 @@ export type PrismaVersion = {
 }
 
 /**
- * Prisma Client JS version: 7.2.0
- * Query Engine version: 0c8ef2ce45c83248ab3df073180d5eda9e8be7a3
+ * Prisma Client JS version: 7.4.2
+ * Query Engine version: 94a226be1cf2967af2541cca5529f0f7ba866919
  */
 export const prismaVersion: PrismaVersion = {
-  client: "7.2.0",
-  engine: "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3"
+  client: "7.4.2",
+  engine: "94a226be1cf2967af2541cca5529f0f7ba866919"
 }
 
 /**
@@ -392,7 +392,8 @@ export const ModelName = {
   MemoryTag: 'MemoryTag',
   Share: 'Share',
   EventLog: 'EventLog',
-  ProfileSettings: 'ProfileSettings'
+  ProfileSettings: 'ProfileSettings',
+  MemoryLink: 'MemoryLink'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -408,7 +409,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "memory" | "file" | "tag" | "memoryTag" | "share" | "eventLog" | "profileSettings"
+    modelProps: "user" | "session" | "memory" | "file" | "tag" | "memoryTag" | "share" | "eventLog" | "profileSettings" | "memoryLink"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1078,6 +1079,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    MemoryLink: {
+      payload: Prisma.$MemoryLinkPayload<ExtArgs>
+      fields: Prisma.MemoryLinkFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MemoryLinkFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MemoryLinkPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MemoryLinkFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MemoryLinkPayload>
+        }
+        findFirst: {
+          args: Prisma.MemoryLinkFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MemoryLinkPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MemoryLinkFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MemoryLinkPayload>
+        }
+        findMany: {
+          args: Prisma.MemoryLinkFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MemoryLinkPayload>[]
+        }
+        create: {
+          args: Prisma.MemoryLinkCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MemoryLinkPayload>
+        }
+        createMany: {
+          args: Prisma.MemoryLinkCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MemoryLinkCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MemoryLinkPayload>[]
+        }
+        delete: {
+          args: Prisma.MemoryLinkDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MemoryLinkPayload>
+        }
+        update: {
+          args: Prisma.MemoryLinkUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MemoryLinkPayload>
+        }
+        deleteMany: {
+          args: Prisma.MemoryLinkDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MemoryLinkUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MemoryLinkUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MemoryLinkPayload>[]
+        }
+        upsert: {
+          args: Prisma.MemoryLinkUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MemoryLinkPayload>
+        }
+        aggregate: {
+          args: Prisma.MemoryLinkAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMemoryLink>
+        }
+        groupBy: {
+          args: Prisma.MemoryLinkGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MemoryLinkGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MemoryLinkCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MemoryLinkCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1153,7 +1228,6 @@ export const MemoryScalarFieldEnum = {
   url: 'url',
   isPinned: 'isPinned',
   summary: 'summary',
-  suggestedTags: 'suggestedTags',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt',
@@ -1235,6 +1309,16 @@ export const ProfileSettingsScalarFieldEnum = {
 } as const
 
 export type ProfileSettingsScalarFieldEnum = (typeof ProfileSettingsScalarFieldEnum)[keyof typeof ProfileSettingsScalarFieldEnum]
+
+
+export const MemoryLinkScalarFieldEnum = {
+  id: 'id',
+  fromId: 'fromId',
+  toId: 'toId',
+  createdAt: 'createdAt'
+} as const
+
+export type MemoryLinkScalarFieldEnum = (typeof MemoryLinkScalarFieldEnum)[keyof typeof MemoryLinkScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1492,6 +1576,7 @@ export type GlobalOmitConfig = {
   share?: Prisma.ShareOmit
   eventLog?: Prisma.EventLogOmit
   profileSettings?: Prisma.ProfileSettingsOmit
+  memoryLink?: Prisma.MemoryLinkOmit
 }
 
 /* Types for Logging */

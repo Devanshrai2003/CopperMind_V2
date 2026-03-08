@@ -62,3 +62,8 @@ export type EventLog = Prisma.EventLogModel
  * 
  */
 export type ProfileSettings = Prisma.ProfileSettingsModel
+/**
+ * Model MemoryLink
+ * 
+ */
+export type MemoryLink = Prisma.MemoryLinkModel
