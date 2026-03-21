@@ -32,8 +32,6 @@ export type UserMinAggregateOutputType = {
   passwordHash: string | null
   isGuest: boolean | null
   guestExpiresAt: Date | null
-  provider: string | null
-  providerId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -46,8 +44,6 @@ export type UserMaxAggregateOutputType = {
   passwordHash: string | null
   isGuest: boolean | null
   guestExpiresAt: Date | null
-  provider: string | null
-  providerId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -60,8 +56,6 @@ export type UserCountAggregateOutputType = {
   passwordHash: number
   isGuest: number
   guestExpiresAt: number
-  provider: number
-  providerId: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -76,8 +70,6 @@ export type UserMinAggregateInputType = {
   passwordHash?: true
   isGuest?: true
   guestExpiresAt?: true
-  provider?: true
-  providerId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -90,8 +82,6 @@ export type UserMaxAggregateInputType = {
   passwordHash?: true
   isGuest?: true
   guestExpiresAt?: true
-  provider?: true
-  providerId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -104,8 +94,6 @@ export type UserCountAggregateInputType = {
   passwordHash?: true
   isGuest?: true
   guestExpiresAt?: true
-  provider?: true
-  providerId?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -191,8 +179,6 @@ export type UserGroupByOutputType = {
   passwordHash: string | null
   isGuest: boolean
   guestExpiresAt: Date | null
-  provider: string | null
-  providerId: string | null
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
@@ -226,10 +212,9 @@ export type UserWhereInput = {
   passwordHash?: Prisma.StringNullableFilter<"User"> | string | null
   isGuest?: Prisma.BoolFilter<"User"> | boolean
   guestExpiresAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
-  provider?: Prisma.StringNullableFilter<"User"> | string | null
-  providerId?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  accounts?: Prisma.AccountListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   memories?: Prisma.MemoryListRelationFilter
   shares?: Prisma.ShareListRelationFilter
@@ -246,10 +231,9 @@ export type UserOrderByWithRelationInput = {
   passwordHash?: Prisma.SortOrderInput | Prisma.SortOrder
   isGuest?: Prisma.SortOrder
   guestExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  provider?: Prisma.SortOrderInput | Prisma.SortOrder
-  providerId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  accounts?: Prisma.AccountOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   memories?: Prisma.MemoryOrderByRelationAggregateInput
   shares?: Prisma.ShareOrderByRelationAggregateInput
@@ -269,10 +253,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   passwordHash?: Prisma.StringNullableFilter<"User"> | string | null
   isGuest?: Prisma.BoolFilter<"User"> | boolean
   guestExpiresAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
-  provider?: Prisma.StringNullableFilter<"User"> | string | null
-  providerId?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  accounts?: Prisma.AccountListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   memories?: Prisma.MemoryListRelationFilter
   shares?: Prisma.ShareListRelationFilter
@@ -289,8 +272,6 @@ export type UserOrderByWithAggregationInput = {
   passwordHash?: Prisma.SortOrderInput | Prisma.SortOrder
   isGuest?: Prisma.SortOrder
   guestExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  provider?: Prisma.SortOrderInput | Prisma.SortOrder
-  providerId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -309,8 +290,6 @@ export type UserScalarWhereWithAggregatesInput = {
   passwordHash?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   isGuest?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   guestExpiresAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
-  provider?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
-  providerId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -323,10 +302,9 @@ export type UserCreateInput = {
   passwordHash?: string | null
   isGuest?: boolean
   guestExpiresAt?: Date | string | null
-  provider?: string | null
-  providerId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   memories?: Prisma.MemoryCreateNestedManyWithoutUserInput
   shares?: Prisma.ShareCreateNestedManyWithoutCreatedByInput
@@ -343,10 +321,9 @@ export type UserUncheckedCreateInput = {
   passwordHash?: string | null
   isGuest?: boolean
   guestExpiresAt?: Date | string | null
-  provider?: string | null
-  providerId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   memories?: Prisma.MemoryUncheckedCreateNestedManyWithoutUserInput
   shares?: Prisma.ShareUncheckedCreateNestedManyWithoutCreatedByInput
@@ -363,10 +340,9 @@ export type UserUpdateInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isGuest?: Prisma.BoolFieldUpdateOperationsInput | boolean
   guestExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   memories?: Prisma.MemoryUpdateManyWithoutUserNestedInput
   shares?: Prisma.ShareUpdateManyWithoutCreatedByNestedInput
@@ -383,10 +359,9 @@ export type UserUncheckedUpdateInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isGuest?: Prisma.BoolFieldUpdateOperationsInput | boolean
   guestExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   memories?: Prisma.MemoryUncheckedUpdateManyWithoutUserNestedInput
   shares?: Prisma.ShareUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -403,8 +378,6 @@ export type UserCreateManyInput = {
   passwordHash?: string | null
   isGuest?: boolean
   guestExpiresAt?: Date | string | null
-  provider?: string | null
-  providerId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -417,8 +390,6 @@ export type UserUpdateManyMutationInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isGuest?: Prisma.BoolFieldUpdateOperationsInput | boolean
   guestExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -431,8 +402,6 @@ export type UserUncheckedUpdateManyInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isGuest?: Prisma.BoolFieldUpdateOperationsInput | boolean
   guestExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -445,8 +414,6 @@ export type UserCountOrderByAggregateInput = {
   passwordHash?: Prisma.SortOrder
   isGuest?: Prisma.SortOrder
   guestExpiresAt?: Prisma.SortOrder
-  provider?: Prisma.SortOrder
-  providerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -459,8 +426,6 @@ export type UserMaxOrderByAggregateInput = {
   passwordHash?: Prisma.SortOrder
   isGuest?: Prisma.SortOrder
   guestExpiresAt?: Prisma.SortOrder
-  provider?: Prisma.SortOrder
-  providerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -473,8 +438,6 @@ export type UserMinOrderByAggregateInput = {
   passwordHash?: Prisma.SortOrder
   isGuest?: Prisma.SortOrder
   guestExpiresAt?: Prisma.SortOrder
-  provider?: Prisma.SortOrder
-  providerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -507,6 +470,20 @@ export type BoolFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type UserCreateNestedOneWithoutAccountsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAccountsInput, Prisma.UserUncheckedCreateWithoutAccountsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAccountsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAccountsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAccountsInput, Prisma.UserUncheckedCreateWithoutAccountsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAccountsInput
+  upsert?: Prisma.UserUpsertWithoutAccountsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAccountsInput, Prisma.UserUpdateWithoutAccountsInput>, Prisma.UserUncheckedUpdateWithoutAccountsInput>
 }
 
 export type UserCreateNestedOneWithoutSessionsInput = {
@@ -595,6 +572,94 @@ export type UserUpdateOneRequiredWithoutProfileNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutProfileInput, Prisma.UserUpdateWithoutProfileInput>, Prisma.UserUncheckedUpdateWithoutProfileInput>
 }
 
+export type UserCreateWithoutAccountsInput = {
+  id?: string
+  email?: string | null
+  emailVerified?: Date | string | null
+  username?: string | null
+  passwordHash?: string | null
+  isGuest?: boolean
+  guestExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  memories?: Prisma.MemoryCreateNestedManyWithoutUserInput
+  shares?: Prisma.ShareCreateNestedManyWithoutCreatedByInput
+  files?: Prisma.FileCreateNestedManyWithoutUserInput
+  events?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  profile?: Prisma.ProfileSettingsCreateNestedOneWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutAccountsInput = {
+  id?: string
+  email?: string | null
+  emailVerified?: Date | string | null
+  username?: string | null
+  passwordHash?: string | null
+  isGuest?: boolean
+  guestExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  memories?: Prisma.MemoryUncheckedCreateNestedManyWithoutUserInput
+  shares?: Prisma.ShareUncheckedCreateNestedManyWithoutCreatedByInput
+  files?: Prisma.FileUncheckedCreateNestedManyWithoutUserInput
+  events?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  profile?: Prisma.ProfileSettingsUncheckedCreateNestedOneWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutAccountsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAccountsInput, Prisma.UserUncheckedCreateWithoutAccountsInput>
+}
+
+export type UserUpsertWithoutAccountsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAccountsInput, Prisma.UserUncheckedUpdateWithoutAccountsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAccountsInput, Prisma.UserUncheckedCreateWithoutAccountsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAccountsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAccountsInput, Prisma.UserUncheckedUpdateWithoutAccountsInput>
+}
+
+export type UserUpdateWithoutAccountsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isGuest?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  guestExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  memories?: Prisma.MemoryUpdateManyWithoutUserNestedInput
+  shares?: Prisma.ShareUpdateManyWithoutCreatedByNestedInput
+  files?: Prisma.FileUpdateManyWithoutUserNestedInput
+  events?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  profile?: Prisma.ProfileSettingsUpdateOneWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAccountsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isGuest?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  guestExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  memories?: Prisma.MemoryUncheckedUpdateManyWithoutUserNestedInput
+  shares?: Prisma.ShareUncheckedUpdateManyWithoutCreatedByNestedInput
+  files?: Prisma.FileUncheckedUpdateManyWithoutUserNestedInput
+  events?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  profile?: Prisma.ProfileSettingsUncheckedUpdateOneWithoutUserNestedInput
+}
+
 export type UserCreateWithoutSessionsInput = {
   id?: string
   email?: string | null
@@ -603,10 +668,9 @@ export type UserCreateWithoutSessionsInput = {
   passwordHash?: string | null
   isGuest?: boolean
   guestExpiresAt?: Date | string | null
-  provider?: string | null
-  providerId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   memories?: Prisma.MemoryCreateNestedManyWithoutUserInput
   shares?: Prisma.ShareCreateNestedManyWithoutCreatedByInput
   files?: Prisma.FileCreateNestedManyWithoutUserInput
@@ -622,10 +686,9 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   passwordHash?: string | null
   isGuest?: boolean
   guestExpiresAt?: Date | string | null
-  provider?: string | null
-  providerId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   memories?: Prisma.MemoryUncheckedCreateNestedManyWithoutUserInput
   shares?: Prisma.ShareUncheckedCreateNestedManyWithoutCreatedByInput
   files?: Prisma.FileUncheckedCreateNestedManyWithoutUserInput
@@ -657,10 +720,9 @@ export type UserUpdateWithoutSessionsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isGuest?: Prisma.BoolFieldUpdateOperationsInput | boolean
   guestExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   memories?: Prisma.MemoryUpdateManyWithoutUserNestedInput
   shares?: Prisma.ShareUpdateManyWithoutCreatedByNestedInput
   files?: Prisma.FileUpdateManyWithoutUserNestedInput
@@ -676,10 +738,9 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isGuest?: Prisma.BoolFieldUpdateOperationsInput | boolean
   guestExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   memories?: Prisma.MemoryUncheckedUpdateManyWithoutUserNestedInput
   shares?: Prisma.ShareUncheckedUpdateManyWithoutCreatedByNestedInput
   files?: Prisma.FileUncheckedUpdateManyWithoutUserNestedInput
@@ -695,10 +756,9 @@ export type UserCreateWithoutMemoriesInput = {
   passwordHash?: string | null
   isGuest?: boolean
   guestExpiresAt?: Date | string | null
-  provider?: string | null
-  providerId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   shares?: Prisma.ShareCreateNestedManyWithoutCreatedByInput
   files?: Prisma.FileCreateNestedManyWithoutUserInput
@@ -714,10 +774,9 @@ export type UserUncheckedCreateWithoutMemoriesInput = {
   passwordHash?: string | null
   isGuest?: boolean
   guestExpiresAt?: Date | string | null
-  provider?: string | null
-  providerId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   shares?: Prisma.ShareUncheckedCreateNestedManyWithoutCreatedByInput
   files?: Prisma.FileUncheckedCreateNestedManyWithoutUserInput
@@ -749,10 +808,9 @@ export type UserUpdateWithoutMemoriesInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isGuest?: Prisma.BoolFieldUpdateOperationsInput | boolean
   guestExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   shares?: Prisma.ShareUpdateManyWithoutCreatedByNestedInput
   files?: Prisma.FileUpdateManyWithoutUserNestedInput
@@ -768,10 +826,9 @@ export type UserUncheckedUpdateWithoutMemoriesInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isGuest?: Prisma.BoolFieldUpdateOperationsInput | boolean
   guestExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   shares?: Prisma.ShareUncheckedUpdateManyWithoutCreatedByNestedInput
   files?: Prisma.FileUncheckedUpdateManyWithoutUserNestedInput
@@ -787,10 +844,9 @@ export type UserCreateWithoutFilesInput = {
   passwordHash?: string | null
   isGuest?: boolean
   guestExpiresAt?: Date | string | null
-  provider?: string | null
-  providerId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   memories?: Prisma.MemoryCreateNestedManyWithoutUserInput
   shares?: Prisma.ShareCreateNestedManyWithoutCreatedByInput
@@ -806,10 +862,9 @@ export type UserUncheckedCreateWithoutFilesInput = {
   passwordHash?: string | null
   isGuest?: boolean
   guestExpiresAt?: Date | string | null
-  provider?: string | null
-  providerId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   memories?: Prisma.MemoryUncheckedCreateNestedManyWithoutUserInput
   shares?: Prisma.ShareUncheckedCreateNestedManyWithoutCreatedByInput
@@ -841,10 +896,9 @@ export type UserUpdateWithoutFilesInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isGuest?: Prisma.BoolFieldUpdateOperationsInput | boolean
   guestExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   memories?: Prisma.MemoryUpdateManyWithoutUserNestedInput
   shares?: Prisma.ShareUpdateManyWithoutCreatedByNestedInput
@@ -860,10 +914,9 @@ export type UserUncheckedUpdateWithoutFilesInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isGuest?: Prisma.BoolFieldUpdateOperationsInput | boolean
   guestExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   memories?: Prisma.MemoryUncheckedUpdateManyWithoutUserNestedInput
   shares?: Prisma.ShareUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -879,10 +932,9 @@ export type UserCreateWithoutSharesInput = {
   passwordHash?: string | null
   isGuest?: boolean
   guestExpiresAt?: Date | string | null
-  provider?: string | null
-  providerId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   memories?: Prisma.MemoryCreateNestedManyWithoutUserInput
   files?: Prisma.FileCreateNestedManyWithoutUserInput
@@ -898,10 +950,9 @@ export type UserUncheckedCreateWithoutSharesInput = {
   passwordHash?: string | null
   isGuest?: boolean
   guestExpiresAt?: Date | string | null
-  provider?: string | null
-  providerId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   memories?: Prisma.MemoryUncheckedCreateNestedManyWithoutUserInput
   files?: Prisma.FileUncheckedCreateNestedManyWithoutUserInput
@@ -933,10 +984,9 @@ export type UserUpdateWithoutSharesInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isGuest?: Prisma.BoolFieldUpdateOperationsInput | boolean
   guestExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   memories?: Prisma.MemoryUpdateManyWithoutUserNestedInput
   files?: Prisma.FileUpdateManyWithoutUserNestedInput
@@ -952,10 +1002,9 @@ export type UserUncheckedUpdateWithoutSharesInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isGuest?: Prisma.BoolFieldUpdateOperationsInput | boolean
   guestExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   memories?: Prisma.MemoryUncheckedUpdateManyWithoutUserNestedInput
   files?: Prisma.FileUncheckedUpdateManyWithoutUserNestedInput
@@ -971,10 +1020,9 @@ export type UserCreateWithoutEventsInput = {
   passwordHash?: string | null
   isGuest?: boolean
   guestExpiresAt?: Date | string | null
-  provider?: string | null
-  providerId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   memories?: Prisma.MemoryCreateNestedManyWithoutUserInput
   shares?: Prisma.ShareCreateNestedManyWithoutCreatedByInput
@@ -990,10 +1038,9 @@ export type UserUncheckedCreateWithoutEventsInput = {
   passwordHash?: string | null
   isGuest?: boolean
   guestExpiresAt?: Date | string | null
-  provider?: string | null
-  providerId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   memories?: Prisma.MemoryUncheckedCreateNestedManyWithoutUserInput
   shares?: Prisma.ShareUncheckedCreateNestedManyWithoutCreatedByInput
@@ -1025,10 +1072,9 @@ export type UserUpdateWithoutEventsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isGuest?: Prisma.BoolFieldUpdateOperationsInput | boolean
   guestExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   memories?: Prisma.MemoryUpdateManyWithoutUserNestedInput
   shares?: Prisma.ShareUpdateManyWithoutCreatedByNestedInput
@@ -1044,10 +1090,9 @@ export type UserUncheckedUpdateWithoutEventsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isGuest?: Prisma.BoolFieldUpdateOperationsInput | boolean
   guestExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   memories?: Prisma.MemoryUncheckedUpdateManyWithoutUserNestedInput
   shares?: Prisma.ShareUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1063,10 +1108,9 @@ export type UserCreateWithoutProfileInput = {
   passwordHash?: string | null
   isGuest?: boolean
   guestExpiresAt?: Date | string | null
-  provider?: string | null
-  providerId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   memories?: Prisma.MemoryCreateNestedManyWithoutUserInput
   shares?: Prisma.ShareCreateNestedManyWithoutCreatedByInput
@@ -1082,10 +1126,9 @@ export type UserUncheckedCreateWithoutProfileInput = {
   passwordHash?: string | null
   isGuest?: boolean
   guestExpiresAt?: Date | string | null
-  provider?: string | null
-  providerId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   memories?: Prisma.MemoryUncheckedCreateNestedManyWithoutUserInput
   shares?: Prisma.ShareUncheckedCreateNestedManyWithoutCreatedByInput
@@ -1117,10 +1160,9 @@ export type UserUpdateWithoutProfileInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isGuest?: Prisma.BoolFieldUpdateOperationsInput | boolean
   guestExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   memories?: Prisma.MemoryUpdateManyWithoutUserNestedInput
   shares?: Prisma.ShareUpdateManyWithoutCreatedByNestedInput
@@ -1136,10 +1178,9 @@ export type UserUncheckedUpdateWithoutProfileInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isGuest?: Prisma.BoolFieldUpdateOperationsInput | boolean
   guestExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   memories?: Prisma.MemoryUncheckedUpdateManyWithoutUserNestedInput
   shares?: Prisma.ShareUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1153,6 +1194,7 @@ export type UserUncheckedUpdateWithoutProfileInput = {
  */
 
 export type UserCountOutputType = {
+  accounts: number
   sessions: number
   memories: number
   shares: number
@@ -1161,6 +1203,7 @@ export type UserCountOutputType = {
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  accounts?: boolean | UserCountOutputTypeCountAccountsArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   memories?: boolean | UserCountOutputTypeCountMemoriesArgs
   shares?: boolean | UserCountOutputTypeCountSharesArgs
@@ -1176,6 +1219,13 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
    * Select specific fields to fetch from the UserCountOutputType
    */
   select?: Prisma.UserCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAccountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AccountWhereInput
 }
 
 /**
@@ -1222,10 +1272,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   passwordHash?: boolean
   isGuest?: boolean
   guestExpiresAt?: boolean
-  provider?: boolean
-  providerId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   memories?: boolean | Prisma.User$memoriesArgs<ExtArgs>
   shares?: boolean | Prisma.User$sharesArgs<ExtArgs>
@@ -1243,8 +1292,6 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   passwordHash?: boolean
   isGuest?: boolean
   guestExpiresAt?: boolean
-  provider?: boolean
-  providerId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -1257,8 +1304,6 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   passwordHash?: boolean
   isGuest?: boolean
   guestExpiresAt?: boolean
-  provider?: boolean
-  providerId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -1271,14 +1316,13 @@ export type UserSelectScalar = {
   passwordHash?: boolean
   isGuest?: boolean
   guestExpiresAt?: boolean
-  provider?: boolean
-  providerId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "emailVerified" | "username" | "passwordHash" | "isGuest" | "guestExpiresAt" | "provider" | "providerId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "emailVerified" | "username" | "passwordHash" | "isGuest" | "guestExpiresAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   memories?: boolean | Prisma.User$memoriesArgs<ExtArgs>
   shares?: boolean | Prisma.User$sharesArgs<ExtArgs>
@@ -1293,6 +1337,7 @@ export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
+    accounts: Prisma.$AccountPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     memories: Prisma.$MemoryPayload<ExtArgs>[]
     shares: Prisma.$SharePayload<ExtArgs>[]
@@ -1308,8 +1353,6 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     passwordHash: string | null
     isGuest: boolean
     guestExpiresAt: Date | null
-    provider: string | null
-    providerId: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -1706,6 +1749,7 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  accounts<T extends Prisma.User$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   memories<T extends Prisma.User$memoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$memoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MemoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   shares<T extends Prisma.User$sharesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sharesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SharePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1748,8 +1792,6 @@ export interface UserFieldRefs {
   readonly passwordHash: Prisma.FieldRef<"User", 'String'>
   readonly isGuest: Prisma.FieldRef<"User", 'Boolean'>
   readonly guestExpiresAt: Prisma.FieldRef<"User", 'DateTime'>
-  readonly provider: Prisma.FieldRef<"User", 'String'>
-  readonly providerId: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }
@@ -2137,6 +2179,30 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Users to delete.
    */
   limit?: number
+}
+
+/**
+ * User.accounts
+ */
+export type User$accountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Account
+   */
+  select?: Prisma.AccountSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Account
+   */
+  omit?: Prisma.AccountOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AccountInclude<ExtArgs> | null
+  where?: Prisma.AccountWhereInput
+  orderBy?: Prisma.AccountOrderByWithRelationInput | Prisma.AccountOrderByWithRelationInput[]
+  cursor?: Prisma.AccountWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AccountScalarFieldEnum | Prisma.AccountScalarFieldEnum[]
 }
 
 /**

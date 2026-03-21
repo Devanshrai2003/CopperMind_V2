@@ -32,22 +32,34 @@ model User {
   email          String?   @unique
   emailVerified  DateTime?
   username       String?   @unique
-  passwordHash   String? // null for OAuth users / guests without password
+  passwordHash   String? // null for OAuth users / guests
   isGuest        Boolean   @default(false)
   guestExpiresAt DateTime? // optional expiry for guest accounts
-  provider       String? // e.g., "google", "github", "credentials"
-  providerId     String? // provider unique id
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
-  sessions Session[]
-  memories Memory[]
-  shares   Share[]
-  files    File[]
-  events   EventLog[]
-  profile  ProfileSettings?
+  accounts       Account[]
+  sessions       Session[]
+  memories       Memory[]
+  shares         Share[]
+  files          File[]
+  events         EventLog[]
+  profile        ProfileSettings?
 
   @@index([createdAt])
+}
+
+model Account {
+  id             String    @id @default(cuid())
+  userId         String
+  provider       String
+  providerId     String
+  createdAt      DateTime  @default(now())
+
+  user           User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerId])
+  @@index([userId])
 }
 
 model Session {

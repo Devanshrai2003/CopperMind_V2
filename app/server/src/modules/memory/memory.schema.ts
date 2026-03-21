@@ -33,6 +33,7 @@ export const memoryQuerySchema = z.object({
     .string()
     .optional()
     .transform((v) => (v ? v.split(",") : undefined)),
+  query: z.string().optional(),
 });
 
 export const suggestTagsQuerySchema = z.object({

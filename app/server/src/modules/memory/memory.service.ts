@@ -1,7 +1,8 @@
+import type { Prisma } from "../../generated/prisma/client.js";
 import { MemoryType } from "../../generated/prisma/enums.js";
 import { gemini } from "../../lib/googleGenAi.js";
 import { prisma } from "../../lib/prisma.js";
-import { extractMemoryLinks, normalizeTags } from "./memory.utils.js";
+import { normalizeTags } from "./memory.utils.js";
 
 export async function createMemory(
   userId: string,
@@ -10,6 +11,7 @@ export async function createMemory(
   content?: string,
   url?: string,
   tags?: string[],
+  links?: string[],
 ) {
   if (type === MemoryType.NOTE && !content) {
     throw new Error("Content is required for Notes");
@@ -52,11 +54,19 @@ export async function createMemory(
       });
     }
 
-    if (content) {
-      await createMemoryLinks(userId, memory.id, content);
-    }
+    const safeLinks = [
+      ...new Set((links ?? []).filter((link) => link !== memory.id)),
+    ];
 
-    return { memory, tags: normalizedTags };
+    const memoryLinks = await tx.memoryLink.createMany({
+      data: safeLinks.map((linkId) => ({
+        fromId: memory.id,
+        toId: linkId,
+      })),
+      skipDuplicates: true,
+    });
+
+    return { memory, tags: normalizedTags, memoryLinks };
   });
 
   return data;
@@ -69,6 +79,7 @@ export async function updateMemory(
   content?: string,
   url?: string,
   tags?: string[],
+  links?: string[],
 ) {
   const data = await prisma.$transaction(async (tx) => {
     const memory = await tx.memory.findFirst({
@@ -131,11 +142,25 @@ export async function updateMemory(
           skipDuplicates: true,
         });
 
-        if (content) {
-          await createMemoryLinks(userId, memory.id, content);
-        }
+        const safeLinks = [
+          ...new Set((links ?? []).filter((link) => link !== memory.id)),
+        ];
 
-        return { memory: updatedMemory, tags: normalizedTags };
+        await tx.memoryLink.deleteMany({
+          where: {
+            fromId: memoryId,
+          },
+        });
+
+        const memoryLinks = await tx.memoryLink.createMany({
+          data: safeLinks.map((linkId) => ({
+            fromId: memory.id,
+            toId: linkId,
+          })),
+          skipDuplicates: true,
+        });
+
+        return { memory: updatedMemory, tags: normalizedTags, memoryLinks };
       }
     }
   });
@@ -155,6 +180,12 @@ export async function deleteMemory(
     if (!memory) {
       throw new Error("Memory Not Found");
     }
+
+    await tx.memoryLink.deleteMany({
+      where: {
+        OR: [{ fromId: memoryId }, { toId: memoryId }],
+      },
+    });
 
     const deletedMemory = await tx.memory.update({
       where: { id: memoryId },
@@ -232,6 +263,7 @@ export async function getMemoryList(
     isPinned?: boolean;
     type?: MemoryType;
     tags?: string[];
+    query?: string;
   },
 ) {
   const safeLimit = Math.min(Math.max(limit ?? 20, 1), 50);
@@ -252,6 +284,22 @@ export async function getMemoryList(
             },
           },
         },
+      }),
+      ...(filters?.query && {
+        OR: [
+          {
+            title: {
+              contains: filters.query,
+              mode: "insensitive",
+            },
+          },
+          {
+            content: {
+              contains: filters.query,
+              mode: "insensitive",
+            },
+          },
+        ],
       }),
       ...(cursor && {
         OR: [
@@ -347,35 +395,82 @@ export async function suggestTags(title: string, content?: string) {
   return normalizeTags(JSON.parse(result.text ?? "[]"));
 }
 
-export async function createMemoryLinks(
-  userId: string,
-  memoryId: string,
-  content: string,
-) {
-  const links = extractMemoryLinks(content);
+export async function getMemoryNetwork(memoryId: string, depth: number = 1) {
+  const visited = new Set([memoryId]);
+  let frontier = [memoryId];
+  const edges: { from: string; to: string }[] = [];
 
-  const linkedMemoriesRaw = await prisma.memory.findMany({
+  for (let i = 0; i < depth; i++) {
+    const links = await prisma.memoryLink.findMany({
+      where: {
+        OR: [{ fromId: { in: frontier } }, { toId: { in: frontier } }],
+      },
+    });
+
+    const nextFrontier: string[] = [];
+
+    links.forEach((link) => {
+      edges.push({
+        from: link.fromId,
+        to: link.toId,
+      });
+
+      if (!visited.has(link.fromId)) {
+        visited.add(link.fromId);
+        nextFrontier.push(link.fromId);
+      }
+
+      if (!visited.has(link.toId)) {
+        visited.add(link.toId);
+        nextFrontier.push(link.toId);
+      }
+    });
+
+    frontier = nextFrontier;
+  }
+
+  const nodes = await prisma.memory.findMany({
+    where: { id: { in: [...visited] } },
+    select: { id: true, title: true },
+  });
+
+  return { nodes, edges };
+}
+
+export async function getTagsList(userId: string, query?: string) {
+  const tagCounts = await prisma.memoryTag.groupBy({
+    by: ["tagId"],
     where: {
-      userId,
-      title: { in: links },
+      memory: {
+        userId: userId,
+        deletedAt: null,
+      },
+      ...(query && {
+        tag: {
+          name: {
+            contains: query,
+            mode: "insensitive",
+          },
+        },
+      }),
+    },
+    _count: {
+      tagId: true,
     },
   });
 
-  const linkedMemories = linkedMemoriesRaw.filter(
-    (link) => link.id !== memoryId,
-  );
-
-  const memoryLinks = await prisma.$transaction(async (tx) => {
-    await tx.memoryLink.deleteMany({
-      where: { fromId: memoryId },
-    });
-
-    await tx.memoryLink.createMany({
-      data: linkedMemories.map((link) => ({
-        fromId: memoryId,
-        toId: link.id,
-      })),
-      skipDuplicates: true,
-    });
+  const tags = await prisma.tag.findMany({
+    where: {
+      id: {
+        in: tagCounts.map((tag) => tag.tagId),
+      },
+    },
   });
+
+  const tagMap = new Map(tags.map((tag) => [tag.id, tag.name]));
+
+  return tagCounts.map((tag) => ({
+    name: tagMap.get(tag.tagId),
+    usageCount: tag._count.tagId,
+  }));
 }

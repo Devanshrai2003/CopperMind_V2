@@ -7,6 +7,8 @@ import {
   getMemoryById,
   getMemoryList,
   suggestTags,
+  getMemoryNetwork,
+  getTagsList,
 } from "./memory.service.js";
 import { ERROR_CODES } from "../../lib/apiErrors.js";
 import {
@@ -29,7 +31,7 @@ export async function getMemoriesHandler(req: Request, res: Response) {
       );
     }
 
-    const { limit, cursor, isPinned, type, tags } = parsed.data;
+    const { limit, cursor, isPinned, type, tags, query } = parsed.data;
 
     const filters = {
       ...(isPinned !== undefined && {
@@ -37,6 +39,7 @@ export async function getMemoriesHandler(req: Request, res: Response) {
       }),
       ...(type && { type: type }),
       ...(tags && { tags: tags }),
+      ...(query && { search: query }),
     };
 
     const memories = await getMemoryList(
@@ -232,4 +235,33 @@ export async function fetchTagSuggestions(req: Request, res: Response) {
   }
   const suggestions = await suggestTags(title, content);
   return successResponse(res, suggestions, 200);
+}
+
+export async function getMemoryNetworkHandler(req: Request, res: Response) {
+  const { memoryId } = req.params;
+
+  if (!memoryId) {
+    return errorResponse(
+      res,
+      ERROR_CODES.BAD_REQUEST,
+      "Invalid Memory ID",
+      400,
+    );
+  }
+  const depthRaw = Number(req.query.depth);
+  const depth =
+    Number.isInteger(depthRaw) && depthRaw > 0 ? Math.min(depthRaw, 3) : 1;
+
+  const graph = await getMemoryNetwork(memoryId, depth);
+
+  return successResponse(res, graph, 200);
+}
+
+export async function getTagsListHandler(req: Request, res: Response) {
+  const userId = req.user.id;
+
+  const query = String(req.query.query);
+  const tags = await getTagsList(userId, query);
+
+  return tags;
 }

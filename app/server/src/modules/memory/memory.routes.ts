@@ -6,6 +6,8 @@ import {
   updateMemoryHandler,
   deleteMemoryHandler,
   fetchTagSuggestions,
+  getMemoryNetworkHandler,
+  getTagsListHandler,
 } from "./memory.controller.js";
 import { requireAuth } from "../auth/auth.middleware.js";
 
@@ -13,6 +15,8 @@ const memoryRouter = Router();
 
 memoryRouter.get("/", requireAuth, getMemoriesHandler);
 memoryRouter.get("/:memoryId", requireAuth, getMemoryHandler);
+memoryRouter.get("/tags", requireAuth, getTagsListHandler);
+memoryRouter.get("/:memoryId/network", requireAuth, getMemoryNetworkHandler);
 memoryRouter.post("/", requireAuth, createMemoryHandler);
 memoryRouter.patch("/:memoryId", requireAuth, updateMemoryHandler);
 memoryRouter.delete("/:memoryId", requireAuth, deleteMemoryHandler);
